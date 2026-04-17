@@ -46,7 +46,7 @@ const codeExamples = {
   -H "x-api-key: your_api_key" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "color": "#D946EF",
+    "input": "#D946EF",
     "to": "oklch"
   }'`,
 
@@ -57,7 +57,7 @@ const codeExamples = {
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    color: '#D946EF',
+    input: '#D946EF',
     to: 'oklch'
   })
 });
