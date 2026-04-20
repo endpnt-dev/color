@@ -48,7 +48,6 @@ export async function demoProxy(
   // Check if demo API key is available
   const demoApiKey = process.env.DEMO_API_KEY
   if (!demoApiKey) {
-    console.warn('DEMO_API_KEY not configured')
     return errorResponse(
       'DEMO_UNAVAILABLE',
       'Demo service temporarily unavailable',
@@ -58,12 +57,11 @@ export async function demoProxy(
   }
 
   try {
-    // Prepare request to internal API
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : 'http://localhost:3000'
-
-    const targetUrl = `${baseUrl}/api/v1${options.endpoint}`
+    // Prepare request to internal API — derive base URL from incoming request
+    // so it works across all deploy contexts (custom domain, preview, localhost).
+    // DO NOT use process.env.VERCEL_URL — that returns deployment-specific URL,
+    // not the custom domain, which causes internal fetches to fail in production.
+    const targetUrl = new URL(`/api/v1${options.endpoint}`, request.url).toString()
 
     // Forward the request with demo API key
     const headers = new Headers()
