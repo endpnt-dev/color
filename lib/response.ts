@@ -65,6 +65,7 @@ export function getErrorMessage(code: ErrorCode): string {
     UNSUPPORTED_OPERATION: 'Unsupported operation. Check the endpoint documentation.',
     PREMIUM_FEATURE_REQUIRED: 'This feature requires Starter tier or higher.',
     DEMO_UNAVAILABLE: 'Demo service temporarily unavailable.',
+    ORIGIN_NOT_ALLOWED: 'Origin not allowed for demo access.',
     INTERNAL_ERROR: 'Internal server error. Please try again later.',
   }
   return messages[code]

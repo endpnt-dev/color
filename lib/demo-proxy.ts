@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkDemoRateLimit } from './rate-limit'
 import { errorResponse, generateRequestId } from './response'
+import { DEFAULT_ALLOWED_ORIGINS, AllowedOrigin } from './demo-config'
 
 export interface DemoProxyOptions {
   endpoint: string
   allowedMethods?: string[]
+  allowedOrigins?: readonly string[]
 }
 
 export async function demoProxy(
@@ -21,6 +23,23 @@ export async function demoProxy(
       'UNSUPPORTED_OPERATION',
       `Method ${request.method} not allowed for demo endpoint`,
       405,
+      { request_id: requestId }
+    )
+  }
+
+  // Check origin-based access control
+  const allowedOrigins = options.allowedOrigins || DEFAULT_ALLOWED_ORIGINS
+  const origin = request.headers.get('origin')
+
+  // Phase 0 policy: allow null origins (mobile apps, direct API calls, Postman, curl)
+  // Future phases may tighten this based on abuse patterns
+  const isOriginAllowed = origin === null || allowedOrigins.includes(origin)
+
+  if (!isOriginAllowed) {
+    return errorResponse(
+      'ORIGIN_NOT_ALLOWED',
+      'Origin not allowed for demo access',
+      403,
       { request_id: requestId }
     )
   }
