@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server'
 import { demoProxy } from '@/lib/demo-proxy'
-import { DEFAULT_ALLOWED_ORIGINS } from '@/lib/demo-config'
+import { ALLOWED_ORIGINS } from '@/lib/demo-config'
 
 export async function POST(request: NextRequest) {
   return demoProxy(request, {
     endpoint: '/name',
     allowedMethods: ['POST'],
-    allowedOrigins: DEFAULT_ALLOWED_ORIGINS
+    allowedOrigins: ALLOWED_ORIGINS
   })
 }
 
@@ -14,6 +14,6 @@ export async function GET(request: NextRequest) {
   return demoProxy(request, {
     endpoint: '/name',
     allowedMethods: ['GET', 'POST'],
-    allowedOrigins: DEFAULT_ALLOWED_ORIGINS
+    allowedOrigins: ALLOWED_ORIGINS
   })
 }
