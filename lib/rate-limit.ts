@@ -83,7 +83,7 @@ function initializeDemoRateLimit() {
         `${DEMO_RATE_LIMIT.window_minutes} m`
       ),
       analytics: true,
-      prefix: 'endpnt:ratelimit:color:demo',
+      prefix: 'endpnt:demo:color:ratelimit',
     })
   }
   return demoRateLimit
