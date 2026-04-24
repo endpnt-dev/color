@@ -1,3 +1,5 @@
+> **⚠️ Security note (2026-04-24):** This file previously contained a live API key literal (C-008). The key has been revoked and is no longer active. Curl examples use `YOUR_API_KEY` — substitute a key retrieved from Vercel env.
+
 # Color API — Demo Proxy Fix + Polish Pass (CC Spec)
 **Version:** 1.0
 **Date:** April 17, 2026 (written late, execute morning of Apr 18)
@@ -203,7 +205,7 @@ Phase 6b — **Full demo proxy smoke test against https://color.endpnt.dev.** Se
 | 6 | Demo rate limit enforcement | Run the `for i in 1..22; do curl ...; done` loop against `/api/demo/convert` | Requests 1-20 succeed, requests 21+ return `RATE_LIMIT_EXCEEDED` — confirms the 20/10min limit | |
 | 7 | Demo rate limit displays remaining_credits correctly | Check that successive requests show decrementing `remaining_credits` value | `20 → 19 → 18 → ...` pattern in meta.remaining_credits | |
 | 8 | Demo does NOT leak DEMO_API_KEY | `curl -s https://color.endpnt.dev/api/demo/convert | grep -i "ek_live"` | Zero matches | |
-| 9 | v1 endpoint still works (regression check) | `curl -s -X POST https://color.endpnt.dev/api/v1/convert -H "x-api-key: ek_live_hoWnzx74NUf04esiG8pv" -H "Content-Type: application/json" -d '{"input":"#FF5733","to":"rgb"}'` | `success: true, result: "rgb(255, 87, 51)"` — confirms fix didn't break v1 | |
+| 9 | v1 endpoint still works (regression check) | `curl -s -X POST https://color.endpnt.dev/api/v1/convert -H "x-api-key: YOUR_API_KEY" -H "Content-Type: application/json" -d '{"input":"#FF5733","to":"rgb"}'` | `success: true, result: "rgb(255, 87, 51)"` — confirms fix didn't break v1 | |
 | 10 | No VERCEL_URL references remain | `grep -rn "VERCEL_URL" lib/ app/` from repo root | Zero matches | |
 
 ### A note on the rate limit test
