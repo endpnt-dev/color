@@ -207,32 +207,32 @@ response = requests.post(url, headers=headers, json=data)`
   {
     endpoint: '/palette',
     method: 'POST' as const,
-    title: 'Palette Extraction',
-    description: 'Extract dominant colors from images using k-means clustering (Starter+ required)',
+    title: 'Palette Generation',
+    description: 'Generate a palette algorithmically from a single seed color (Starter+ required)',
     defaultParams: {
-      image_url: 'https://picsum.photos/300/200',
-      colors: 6,
-      format: 'hex'
+      input: '#3B82F6',
+      algorithm: 'tints',
+      count: 5
     },
     paramConfig: [
       {
-        key: 'image_url',
-        label: 'Image URL',
+        key: 'input',
+        label: 'Seed Color',
         type: 'text' as const,
-        placeholder: 'https://example.com/image.jpg',
+        placeholder: '#3B82F6',
         required: true
       },
       {
-        key: 'colors',
-        label: 'Number of Colors',
-        type: 'number' as const,
-        placeholder: '6'
+        key: 'algorithm',
+        label: 'Algorithm',
+        type: 'select' as const,
+        options: ['tints', 'shades', 'tones', 'monochromatic', 'balanced']
       },
       {
-        key: 'format',
-        label: 'Output Format',
-        type: 'select' as const,
-        options: ['hex', 'rgb', 'hsl', 'oklch']
+        key: 'count',
+        label: 'Number of Colors',
+        type: 'number' as const,
+        placeholder: '5'
       }
     ],
     examples: {
@@ -240,9 +240,9 @@ response = requests.post(url, headers=headers, json=data)`
   -H "x-api-key: your_api_key" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "image_url": "https://example.com/image.jpg",
-    "colors": 6,
-    "format": "hex"
+    "input": "#3B82F6",
+    "algorithm": "tints",
+    "count": 5
   }'`,
       javascript: `const response = await fetch('https://color.endpnt.dev/api/v1/palette', {
   method: 'POST',
@@ -251,9 +251,9 @@ response = requests.post(url, headers=headers, json=data)`
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    image_url: 'https://example.com/image.jpg',
-    colors: 6,
-    format: 'hex'
+    input: '#3B82F6',
+    algorithm: 'tints',
+    count: 5
   })
 });
 
@@ -266,9 +266,9 @@ headers = {
     "Content-Type": "application/json"
 }
 data = {
-    "image_url": "https://example.com/image.jpg",
-    "colors": 6,
-    "format": "hex"
+    "input": "#3B82F6",
+    "algorithm": "tints",
+    "count": 5
 }
 
 response = requests.post(url, headers=headers, json=data)`
@@ -408,7 +408,6 @@ export default function DocsPage() {
                   <div><code>INVALID_COLOR_FORMAT</code> - Invalid color format</div>
                   <div><code>MISSING_REQUIRED_FIELD</code> - Required parameter missing</div>
                   <div><code>UNSUPPORTED_OPERATION</code> - Unsupported operation</div>
-                  <div><code>FILE_TOO_LARGE</code> - Image file too large</div>
                   <div><code>RATE_LIMITED</code> - Rate limit exceeded</div>
                 </div>
               </div>
@@ -417,7 +416,6 @@ export default function DocsPage() {
                 <div className="space-y-1 text-muted-foreground">
                   <div><code>PROCESSING_ERROR</code> - Error processing request</div>
                   <div><code>SERVICE_UNAVAILABLE</code> - Service temporarily unavailable</div>
-                  <div><code>PALETTE_EXTRACTION_FAILED</code> - Image processing failed</div>
                 </div>
               </div>
             </div>

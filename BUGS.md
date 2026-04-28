@@ -4,13 +4,32 @@
 
 **ID prefix:** `CO-NNN` (sequential, do not reuse).
 
-**Last updated:** 2026-04-27 (CO-001 resolved — CLAUDE.md rewritten with actual library stack: `colord` + `@bjornlu/colorblind` + local JSON). File created 2026-04-24 by first biweekly code health audit.
+**Last updated:** 2026-04-28.
 
 ---
 
 ## Open bugs
 
-*(None as of 2026-04-27.)*
+### CO-002 — `app/docs/page.tsx` contrast section claims APCA support that doesn't exist
+
+- **Severity:** Medium (misleads users — APCA option is non-functional)
+- **File:** `color/app/docs/page.tsx` (~lines 73-134)
+- **Discovered:** 2026-04-28 (surfaced during P-007 audit)
+- **Symptom:** The interactive contrast endpoint in the docs UI shows `algorithm` options `wcag`, `apca`, `both` and the description says "WCAG 2.1 and APCA algorithms." The API only supports WCAG. Selecting `apca` or `both` would either silently return only WCAG data or error.
+- **Root cause:** Docs page was authored before implementation finalized on WCAG-only contrast. The `apca-w3` library was never installed.
+- **Impact:** Users who select APCA or Both in the interactive tester get wrong behavior. False marketing claim.
+- **Fix approach:** Change description to WCAG-only. Remove `algorithm` from `defaultParams` and `paramConfig`. Update all three code examples to remove `algorithm` field.
+- **Status:** Open. Fix before public launch.
+
+### CO-003 — `app/docs/page.tsx` rate limit numbers are wrong
+
+- **Severity:** Low (docs show inflated limits: Starter=10K/mo, Pro=100K/mo; actual: Starter=5K/mo, Pro=25K/mo)
+- **File:** `color/app/docs/page.tsx` (~lines 434-445)
+- **Discovered:** 2026-04-28 (surfaced during P-007 audit)
+- **Symptom:** The rate limit table in the docs page shows Starter at 10,000/month and Pro at 100,000/month. `docs/API-CATALOG.md` and `lib/config.ts` say Starter=5,000/month and Pro=25,000/month.
+- **Root cause:** Docs page values were never reconciled with the enforced limits in `lib/config.ts`.
+- **Fix approach:** Update the displayed limits to match `lib/config.ts` enforced values. Cross-reference `web/lib/pricing.ts` as the marketing source of truth.
+- **Status:** Open. Fix before public launch.
 
 ---
 
